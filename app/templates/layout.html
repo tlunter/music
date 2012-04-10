@@ -1,13 +1,16 @@
+<!DOCTYPE html>
 <html>
     <head>
         <title>Music | {% block title %}{% endblock %}</title>
+        <link href="{{ STATIC_URL }}cssreset-min.css" rel="stylesheet" type="text/css" media="all">
+        <link href="{{ STATIC_URL }}main.css" rel="stylesheet" type="text/css" media="screen">
     </head>
     <body>
         <div id="container">
             <header>
-                <h1>Music!</h1>
+                <h1><a href="{% url index-page %}">Music!</a></h1>
                 {% if user.is_authenticated %}
-                Hey, {{ user.username }} <a href="{% url logout-page %}">Logout</a>
+                Hey, <a href="{% url my-profile-page %}">{{ user.username }}</a> <a href="{% url logout-page %}">Logout</a>
                 {% else %}
                 Nope <a href="{% url socialauth_begin 'google-oauth2' %}">Login with Google</a>
                 {% endif %}<br>
