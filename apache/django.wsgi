@@ -8,8 +8,6 @@ sys.path.append(APACHE_PATH)
 sys.path.append(ROOT_PATH)
 sys.path.append(PROJECTS_PATH)
 
-print sys.path
-
 os.environ['DJANGO_SETTINGS_MODULE'] = 'Music.settings'
 
 import django.core.handlers.wsgi

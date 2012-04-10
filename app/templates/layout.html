@@ -1,0 +1,20 @@
+<html>
+    <head>
+        <title>Music | {% block title %}{% endblock %}</title>
+    </head>
+    <body>
+        <div id="container">
+            <header>
+                <h1>Music!</h1>
+                {% if user.is_authenticated %}
+                Hey, {{ user.username }} <a href="{% url logout-page %}">Logout</a>
+                {% else %}
+                Nope <a href="{% url socialauth_begin 'google-oauth2' %}">Login with Google</a>
+                {% endif %}<br>
+            </header>
+            <section class="content">{% block content %}{% endblock %}</section>
+            <footer>Copyright &copy; Todd Lunter.</footer>
+        </div>
+    </body>
+</html
+

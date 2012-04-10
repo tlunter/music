@@ -5,7 +5,8 @@ from django.conf.urls.defaults import patterns, include, url
 # admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', include('Music.app.urls')),
+    url(r'', include('social_auth.urls')),
+    url(r'', include('Music.app.urls')),
     # Examples:
     # url(r'^$', 'Music.views.home', name='home'),
     # url(r'^Music/', include('Music.foo.urls')),
