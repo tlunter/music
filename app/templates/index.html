@@ -3,6 +3,18 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-Whoa, let's check out some content!<br>
+            <div class="hero-unit center">
+                <h1>Welcome!</h1>
+                {% if user.is_authenticated %}
+                <h2>
+                    Show how to add music.
+                </h2>
+                {% else %}
+                <h2>
+                    This is where you login to Music to start playing what you want from the radio!
+                </h2>
+                <a class="btn btn-primary btn-large" href="{% url socialauth_begin 'google-oauth2' %}">Login with Google OAuth 2</a>
+                {% endif %}
+            </div>
 {% endblock %}
 

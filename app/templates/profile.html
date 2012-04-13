@@ -4,6 +4,20 @@
 
 {% block content %}
 
-{{ user_profile.username }}
+<div class="row">
+    <aside class="span4">
+        <section>
+            <h1>
+                <img src="http://gravatar.com/avatar/{{ gravatar_email }}.png" alt="{{ user_profile.username }}" class="gravatar">
+                {{ user_profile.username }}
+            </h1>
+        </section>
+    </aside>
+    <aside class="offset4 span4">
+        <section>
+            <h2>Recently requested songs</h2>
+        </section>
+    </aside>
+</div>
 
 {% endblock %}

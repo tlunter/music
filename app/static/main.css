@@ -1,4 +1,70 @@
-#container {
-    width: 900px;
-    margin: 0 auto;
+html {
+    overflow-y: scroll;
 }
+
+body {
+    padding-top: 60px;
+}
+
+section {
+    overflow: auto;
+}
+
+.center {
+    text-align: center;
+}
+
+footer {
+    margin-top: 45px;
+    padding: 35px 0 36px;
+    border-top: 1px solid #e5e5e5;
+}
+
+footer a {
+    color: #555;
+}
+
+footer a:hover {
+    color: #222;
+}
+
+footer small {
+    float: left;
+}
+
+footer ul {
+    float: right;
+    list-style: none;
+}
+
+footer ul li {
+    float: left;
+    margin-left: 10px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    line-height: 1;
+}
+
+h1 {
+    font-size: 3em;
+    letter-spacing: -2px;
+    margin-bottom: 30px;
+}
+
+h2 {
+    font-size: 1.7em;
+    letter-spacing: -1px;
+    margin-bottom: 30px;
+    font-weight: normal;
+    color: #999;
+}
+
+p {
+    font-size: 1.1em;
+    line-height: 1.7em;
+}
+
+.gravatar {
+    float: left;
+    margin-right: 10px;

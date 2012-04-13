@@ -2,22 +2,47 @@
 <html>
     <head>
         <title>Music | {% block title %}{% endblock %}</title>
-        <link href="{{ STATIC_URL }}cssreset-min.css" rel="stylesheet" type="text/css" media="all">
+        <!-- <link href="{{ STATIC_URL }}cssreset-min.css" rel="stylesheet" type="text/css" media="all"> -->
+        <link href="{{ STATIC_URL }}bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" media="screen">
+        <!-- <link href="{{ STATIC_URL }}bootstrap/css/bootstrap-responsive.css" rel="stylesheet" type="text/css" media="screen"> -->
         <link href="{{ STATIC_URL }}main.css" rel="stylesheet" type="text/css" media="screen">
     </head>
     <body>
-        <div id="container">
-            <header>
-                <h1><a href="{% url index-page %}">Music!</a></h1>
-                {% if user.is_authenticated %}
-                Hey, <a href="{% url my-profile-page %}">{{ user.username }}</a> <a href="{% url logout-page %}">Logout</a>
-                {% else %}
-                Nope <a href="{% url socialauth_begin 'google-oauth2' %}">Login with Google</a>
-                {% endif %}<br>
-            </header>
-            <section class="content">{% block content %}{% endblock %}</section>
-            <footer>Copyright &copy; Todd Lunter.</footer>
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a href="{% url index-page %}" class="brand">Music</a>
+                    <div class="nav-collapse">
+                        <ul class="nav">
+                            <li><a href="{% url index-page %}">Home</a></li>
+                            {% if user.is_authenticated %}
+                            <li><a href="{% url my-profile-page %}">My Profile</a></li>
+                            <li><a href="{% url logout-page %}">Logout</a></li>
+                            {% else %}
+                            <li><a href="{% url socialauth_begin 'google-oauth2' %}">Login</a></li>
+                            {% endif %} 
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            {% block content %}{% endblock %}
+            <footer class="footer">
+                <small>Copyright &copy; Todd Lunter.</small>
+                <nav>
+                    <ul>
+                        <li><a href="{% url index-page %}">Home</a></li>
+                        {% if user.is_authenticated %}
+                        <li><a href="{% url my-profile-page %}">My Profile</a></li>
+                        <li><a href="{% url logout-page %}">Logout</a></li>
+                        {% else %}
+                        <li><a href="{% url socialauth_begin 'google-oauth2' %}">Login</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </footer>
         </div>
     </body>
-</html
+</html>
 
