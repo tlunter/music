@@ -1,9 +1,0 @@
-{% extends 'layout.html' %}
-
-{% block title %}Scan running{% endblock %}
-
-{% block content %}
-<h1>Scan for Tracks!</h1>
-<h2>You already have a scan running!</h2>
-The scan is at about <strong>{{ scan.curr_count }}</strong> tracks out of <strong>{{ scan.total_count }}</strong> or <strong>{{ percentage|floatformat:0 }}%</strong> complete.
-{% endblock %}
