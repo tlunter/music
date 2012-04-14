@@ -2,10 +2,11 @@
 <html>
     <head>
         <title>Music | {% block title %}{% endblock %}</title>
-        <!-- <link href="{{ STATIC_URL }}cssreset-min.css" rel="stylesheet" type="text/css" media="all"> -->
         <link href="{{ STATIC_URL }}bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" media="screen">
-        <!-- <link href="{{ STATIC_URL }}bootstrap/css/bootstrap-responsive.css" rel="stylesheet" type="text/css" media="screen"> -->
         <link href="{{ STATIC_URL }}main.css" rel="stylesheet" type="text/css" media="screen">
+        <script src="{{ STATIC_URL }}jquery.js" type="text/javascript"></script>
+        <script src="{{ STATIC_URL }}bootstrap/js/bootstrap.js" type="text/javascript"></script>
+        <script src="{{ STATIC_URL }}main.js" type="text/javascript"></script>
     </head>
     <body>
         <div class="navbar navbar-fixed-top">
@@ -17,6 +18,9 @@
                             <li><a href="{% url index-page %}">Home</a></li>
                             {% if user.is_authenticated %}
                             <li><a href="{% url my-profile-page %}">My Profile</a></li>
+                            {% if perms.app.can_poll_for_tracks %}
+                            <li><a href="{% url load-tracks-page %}">Reload Tracks</a></li>
+                            {% endif %}
                             <li><a href="{% url logout-page %}">Logout</a></li>
                             {% else %}
                             <li><a href="{% url socialauth_begin 'google-oauth2' %}">Login</a></li>

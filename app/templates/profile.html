@@ -13,9 +13,12 @@
             </h1>
         </section>
     </aside>
-    <aside class="offset4 span4">
+    <aside class="span6">
         <section>
-            <h2>Recently requested songs</h2>
+            <h2>Recently requested tracks</h2>
+            {% for queue in queue_tracks %}
+            <p class="recent-track" data-original-title="{{ queue.track.title }}" data-content="Title: <strong>{{ queue.track.title }}</strong><br>Artist: <strong>{{ queue.track.artist }}</strong>">{{ queue.track.title }} - {{ queue.track.artist }}</p>
+            {% endfor %}
         </section>
     </aside>
 </div>

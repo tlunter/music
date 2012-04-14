@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+
+{% block title %}Starting scan!{% endblock %}
+
+{% block content %}
+<h1>Scan for Tracks!</h1>
+<h2>A scan is now running!</h2>
+The scan is for <strong>{{ scan.total_count }}</strong> tracks and may take some time.<br>
+Check back here for a status update!
+{% endblock %}

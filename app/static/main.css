@@ -68,3 +68,12 @@ p {
 .gravatar {
     float: left;
     margin-right: 10px;
+}
+
+.recent-track {
+    font: 11px "Lucida Grande";
+}
+
+.popover-inner {
+    width: 600px;
+}
