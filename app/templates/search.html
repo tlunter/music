@@ -1,0 +1,38 @@
+{% extends 'layout.html' %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+<div class="hero-unit center">
+<form action="{% url search-page %}" method="post">
+    {% csrf_token %}
+    <input type="input" name="search_term" value="{{ search_query }}" placeholder="Search Query" /><br>
+</form>
+</div>
+<table class="table" name="search_table">
+    {% if search_data %}
+    <thead>
+        <tr>
+            <th>Search Results:</th>
+            <th>{{ search_data|length }} Results</th>
+        </tr>
+        <tr>
+            <th class="search-track-title">Title</th>
+            <th class="search-track-artist">Artist</th>
+            <th class="search-track-album">Album</th>
+            <th class="search-track-queue">Queue</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for track in search_data %}
+        <tr>
+            <td class="search-track-title">{{ track.title }}</td>
+            <td class="search-track-artist">{{ track.artist }}</td>
+            <td class="search-track-album">{{ track.album }}</td>
+            <td class="search-track-queue"></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    {% endif %}
+</table>
+{% endblock %}

@@ -13,12 +13,23 @@
             </h1>
         </section>
     </aside>
-    <aside class="span6">
+    <aside class="offset2 span6">
         <section>
-            <h2>Recently requested tracks</h2>
-            {% for queue in queue_tracks %}
-            <p class="recent-track" data-original-title="{{ queue.track.title }}" data-content="Title: <strong>{{ queue.track.title }}</strong><br>Artist: <strong>{{ queue.track.artist }}</strong>">{{ queue.track.title }} - {{ queue.track.artist }}</p>
-            {% endfor %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Recently requested tracks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for queue in queue_tracks %}
+                    <tr class="recent-track" data-original-title="{{ queue.track.title }}" data-content="Title: <strong>{{ queue.track.title }}</strong><br>Artist: <strong>{{ queue.track.artist }}</strong>">
+                        <td>{{ queue.track.title|truncatewords:6 }} - {{ queue.track.artist|truncatewords:5 }}</td>
+                        <td><small>added at {{ queue.time_added|date:"g:i a \o\n j F Y" }}</small></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </section>
     </aside>
 </div>

@@ -71,9 +71,34 @@ p {
 }
 
 .recent-track {
-    font: 11px "Lucida Grande";
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 11px;
+}
+
+.recent-track-date {
+    width: 25%;
 }
 
 .popover-inner {
-    width: 600px;
+    width: auto;
+}
+
+small {
+    font-size: 10px;
+}
+
+.search-track-title {
+    width: 45%;
+}
+
+.search-track-artist {
+    width: 25%;
+}
+
+.search-track-album {
+    width: 25%;
+}
+
+.search-track-queue {
+    width: 5%;
 }

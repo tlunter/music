@@ -2,26 +2,32 @@ from Music.app.models import Track, QueueItem, Setting, ScanCount
 from Music.settings import MUSIC_FOLDER
 from django.contrib.auth.models import User
 from django.shortcuts import render_to_response, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth import logout
 from django.db.models import F, Q
+from django.core import serializers
+from django.views.decorators.csrf import csrf_exempt
 
+from mutagen.mp3 import MP3
 from mutagen.easyid3 import EasyID3
 import subprocess
 import threading
 import hashlib
 import os
+import simplejson
+import time
+import multiprocessing
+pool = multiprocessing.Pool()
 
 def index(request):
-    queue_list = None
-    #if request.user.is_authenticated():
-    #    queue_list = 
+    queue_items = QueueItem.objects.exclude(played = True, deleted = True).order_by('pk')
 
     return render_to_response('index.html',
-                              context_instance=RequestContext(request))
+            {'queue_items': queue_items},
+            context_instance=RequestContext(request))
 
 @login_required
 def logout_view(request):
@@ -37,13 +43,79 @@ def profile_view(request, username = None):
     m.update(user_profile.email.lower())
     gravatar_email = m.hexdigest()
 
-    queue_tracks = QueueItem.objects.filter(user = request.user).order_by('-pk')[:10]
+    queue_tracks = QueueItem.objects.filter(user = request.user).exclude(deleted = True).order_by('-time_added')[:10]
 
     return render_to_response('profile.html',
             {'user_profile': user_profile,
              'gravatar_email': gravatar_email,
              'queue_tracks': queue_tracks},
             context_instance=RequestContext(request))
+
+@login_required
+def search_view(request):
+
+    search_query = ''
+    if request.method == "POST":
+        search_query = request.POST['search_term']
+
+        search_data = instant_search_view(request).content
+
+        search_data = simplejson.loads(search_data)
+        
+        return render_to_response('search.html',
+                {'search_query': search_query,
+                 'search_data': search_data},
+                context_instance=RequestContext(request))
+
+    return render_to_response('search.html',
+            context_instance=RequestContext(request))
+
+
+@login_required
+@csrf_exempt
+def instant_search_view(request):
+    if request.method == 'POST' and len(request.POST['search_term']) > 1:
+        raw_search_terms = request.POST['search_term'].split()
+        search_terms = filter(None, raw_search_terms)
+        start = time.time()
+        track_listing = list(Track.objects.values('id','title','album','artist','albumartist'))
+        print "Prefetch?", time.time() - start
+        tracks = instant_search_method(search_terms, track_listing)
+        print "Fetched", time.time() - start
+        return HttpResponse(simplejson.dumps(tracks))
+
+    raise Http404
+
+def add(x,y):
+    return x + y
+
+def rating(term_piece, track_string):
+    return len(term_piece) if term_piece in track_string else 0
+
+def instant_search_method(search_term, track_listing):
+    new_track_listing = []
+
+    for track in track_listing:
+        new_track = track
+        track_string = u'{0} {1} {2} {3}'.format(track['title'].lower(), track['album'].lower(), track['artist'].lower(), track['albumartist'].lower())
+        split_track_rating = map(lambda x: rating(x, track_string), search_term)
+        track_rating = reduce(add, split_track_rating, 0)
+        new_track['rating'] = track_rating
+        new_track_listing.append(new_track)
+
+    mapped_track_listing = new_track_listing
+
+    filtered_track_listing = filter(lambda track: True if track['rating'] > 0 else False, mapped_track_listing)
+    sorted_track_listing = sorted(filtered_track_listing, key=lambda track: track['rating'], reverse=True)
+    return sorted_track_listing
+
+def queue_tracks_view(request):
+    if request.method == 'POST':
+        if 'song' in request.POST:
+            return render_to_response('queue_tracks.html',
+                    {'song': request.POST['song']},
+                    context_instance=RequestContext(request))
+    raise Http404
 
 def load_tracks_view(request):
 
@@ -106,7 +178,9 @@ def start_track_update(request):
                 if os.path.splitext(mp3)[1] == ".mp3":
                 
                     ScanCount.objects.filter(pk = scan_id).update(curr_count = F('curr_count') + 1)
-                    audio = EasyID3(os.path.join(root,mp3))
+                    audio = MP3(os.path.join(root,mp3), ID3=EasyID3)
+
+                    length = int(audio.info.length)
 
                     try:
                         raw_artist = (audio['artist'][0]).encode('utf-8')
@@ -136,14 +210,15 @@ def start_track_update(request):
                     file_path = unicode(raw_file_path, 'utf-8')
                     music.append({'artist':artist, 'album':album,
                                   'title':title, 'albumartist':albumartist,
-                                  'file_path':file_path})
+                                  'file_path':file_path, 'length':length})
                     
             for track in music:
                 Track.objects.get_or_create(title = track['title'],
                                             artist = track['artist'],
                                             album = track['album'],
                                             albumartist = track['albumartist'],
-                                            file_path = track['file_path'])
+                                            file_path = track['file_path'],
+                                            length = track['length'])
 
         ScanCount.objects.filter(pk = scan_id).update(state = 'FI')
 

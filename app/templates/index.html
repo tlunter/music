@@ -3,18 +3,29 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-            <div class="hero-unit center">
-                <h1>Welcome!</h1>
                 {% if user.is_authenticated %}
-                <h2>
-                    Show how to add music.
-                </h2>
+                <div class="hero-unit center">
+                    <h1>Welcome!</h1>
+                    <a class="btn btn-primary btn-large" href="{% url search-page %}">Search</a>
+                </div>
+                <table class="table">
+                    <tbody>
+                    {% for track in queue_items %}
+                        <tr class="recent-track" data-original-title="{{ track.track.title }}" data-content="<div class='recent-track-data'>Title: <strong class='recent-track-title'>{{ track.track.title }}</strong><br>Artist: <strong class='recent-track-artist'>{{ track.track.artist }}</strong><br>Album: <strong class='recent-track-album'>{{ track.track.album }}</strong></div>">
+                            <td>{{ track.track.title }} - {{ track.track.artist }}</td>
+                            <td class="recent-track-date"><small>added at {{ track.time_added|date:"g:i a \o\n j F Y" }}</small></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
                 {% else %}
-                <h2>
-                    This is where you login to Music to start playing what you want from the radio!
-                </h2>
-                <a class="btn btn-primary btn-large" href="{% url socialauth_begin 'google-oauth2' %}">Login with Google OAuth 2</a>
+                <div class="hero-unit center">
+                    <h1>Welcome!</h1>
+                    <h2>
+                        This is where you login to Music to start playing what you want from the radio!
+                    </h2>
+                    <a class="btn btn-primary btn-large" href="{% url socialauth_begin 'google-oauth2' %}">Login with Google OAuth 2</a>
+                </div>
                 {% endif %}
-            </div>
 {% endblock %}
 
