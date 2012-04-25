@@ -87,14 +87,12 @@ def instant_search_view(request):
         start = time.time()
         query = Track.objects.extra(
             select = {
-                'title_count': ' + '.join(title_map),
-                'album_count': ' + '.join(album_map),
-                'artist_count': ' + '.join(artist_map),
-                'albumartist_count': ' + '.join(albumartist_map),
                 'count': ' + '.join(title_map + album_map + artist_map + albumartist_map)
             },
             where = [' OR '.join(title_map + album_map + artist_map + albumartist_map)],
             order_by = ['-count', 'artist'])
+
+        print "Query: ", query.query
 
         query = list(query)
         print "Processing: ", time.time() - start
