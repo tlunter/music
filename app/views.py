@@ -78,36 +78,30 @@ def instant_search_view(request):
         raw_search_terms = request.POST['search_term'].split()
         search_terms = filter(None, raw_search_terms)
         start = time.time()
-        track_listing = list(Track.objects.values('id','title','album','artist','albumartist'))
-        print "Prefetch?", time.time() - start
-        tracks = instant_search_method(search_terms, track_listing)
-        print "Fetched", time.time() - start
-        return HttpResponse(simplejson.dumps(tracks))
+        
+        title_map       = map(lambda term: "(`title` LIKE '%%{0}%%') * {1}".format(term, len(term) * 3), search_terms)
+        album_map       = map(lambda term: "(`album` LIKE '%%{0}%%') * {1}".format(term, len(term)), search_terms)
+        artist_map      = map(lambda term: "(`artist` LIKE '%%{0}%%') * {1}".format(term, len(term) * 2), search_terms)
+        albumartist_map = map(lambda term: "(`albumartist` LIKE '%%{0}%%') * {1}".format(term, len(term) * 2), search_terms)
+
+        start = time.time()
+        query = Track.objects.extra(
+            select = {
+                'title_count': ' + '.join(title_map),
+                'album_count': ' + '.join(album_map),
+                'artist_count': ' + '.join(artist_map),
+                'albumartist_count': ' + '.join(albumartist_map),
+                'count': ' + '.join(title_map + album_map + artist_map + albumartist_map)
+            },
+            where = [' OR '.join(title_map + album_map + artist_map + albumartist_map)],
+            order_by = ['-count', 'artist'])
+
+        query = list(query)
+        print "Processing: ", time.time() - start
+
+        return HttpResponse(serializers.serialize('json', query, fields = ('title','album','artist'))) #simplejson.dumps(tracks))
 
     raise Http404
-
-def add(x,y):
-    return x + y
-
-def rating(term_piece, track_string):
-    return len(term_piece) if term_piece in track_string else 0
-
-def instant_search_method(search_term, track_listing):
-    new_track_listing = []
-
-    for track in track_listing:
-        new_track = track
-        track_string = u'{0} {1} {2} {3}'.format(track['title'].lower(), track['album'].lower(), track['artist'].lower(), track['albumartist'].lower())
-        split_track_rating = map(lambda x: rating(x, track_string), search_term)
-        track_rating = reduce(add, split_track_rating, 0)
-        new_track['rating'] = track_rating
-        new_track_listing.append(new_track)
-
-    mapped_track_listing = new_track_listing
-
-    filtered_track_listing = filter(lambda track: True if track['rating'] > 0 else False, mapped_track_listing)
-    sorted_track_listing = sorted(filtered_track_listing, key=lambda track: track['rating'], reverse=True)
-    return sorted_track_listing
 
 def queue_tracks_view(request):
     if request.method == 'POST':

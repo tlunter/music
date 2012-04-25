@@ -54,9 +54,9 @@ $(document).ready(function() {
                 var td_artist = $('<td class="search-track-artist" />');
                 var td_album = $('<td class="search-track-album" />');
                 var td_queue = $('<td class="search-track-queue" />');
-                td_title.html(obj.title);
-                td_artist.html(obj.artist);
-                td_album.html(obj.album);
+                td_title.html(obj.fields.title);
+                td_artist.html(obj.fields.artist);
+                td_album.html(obj.fields.album);
                 tr.append(td_title);
                 tr.append(td_artist);
                 tr.append(td_album);
