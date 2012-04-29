@@ -16,16 +16,16 @@
                     <a href="{% url index-page %}" class="brand">Music</a>
                     <div class="nav-collapse">
                         <ul class="nav">
-                            <li><a href="{% url index-page %}">Home</a></li>
+                            <li><a href="{% url index-page %}"><i class="icon-home icon-gray"></i> Home</a></li>
                             {% if user.is_authenticated %}
-                            <li><a href="{% url my-profile-page %}">My Profile</a></li>
+                            <li><a href="{% url my-profile-page %}"><i class="icon-user icon-gray"></i> My Profile</a></li>
                             {% if perms.app.can_poll_for_tracks %}
-                            <li><a href="{% url load-tracks-page %}">Reload Tracks</a></li>
+                            <li><a href="{% url load-tracks-page %}"><i class="icon-check icon-gray"></i> Reload Tracks</a></li>
                             {% endif %}
-                            <li><a href="{% url search-page %}">Search</a></li>
-                            <li><a href="{% url logout-page %}">Logout</a></li>
+                            <li><a href="{% url search-page %}"><i class="icon-search icon-gray"></i> Search</a></li>
+                            <li><a href="{% url logout-page %}"><i class="icon-off icon-gray"></i> Logout</a></li>
                             {% else %}
-                            <li><a href="{% url socialauth_begin 'google-oauth2' %}">Login</a></li>
+                            <li><a href="{% url socialauth_begin 'google-oauth2' %}"><i class="icon-off icon-gray"></i> Login</a></li>
                             {% endif %} 
                         </ul>
                     </div>
@@ -38,12 +38,16 @@
                 <small>Copyright &copy; Todd Lunter.</small>
                 <nav>
                     <ul>
-                        <li><a href="{% url index-page %}">Home</a></li>
+                        <li><a href="{% url index-page %}"><i class="icon-home"></i> Home</a></li>
                         {% if user.is_authenticated %}
-                        <li><a href="{% url my-profile-page %}">My Profile</a></li>
-                        <li><a href="{% url logout-page %}">Logout</a></li>
+                        <li><a href="{% url my-profile-page %}"><i class="icon-user"></i> My Profile</a></li>
+                        {% if perms.app.can_poll_for_tracks %}
+                        <li><a href="{% url load-tracks-page %}"><i class="icon-check"></i> Reload Tracks</a></li>
+                        {% endif %}
+                        <li><a href="{% url search-page %}"><i class="icon-search"></i> Search</a></li>
+                        <li><a href="{% url logout-page %}"><i class="icon-off"></i> Logout</a></li>
                         {% else %}
-                        <li><a href="{% url socialauth_begin 'google-oauth2' %}">Login</a></li>
+                        <li><a href="{% url socialauth_begin 'google-oauth2' %}"><i class="icon-off"></i> Login</a></li>
                         {% endif %}
                     </ul>
                 </nav>

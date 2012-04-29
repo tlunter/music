@@ -1404,6 +1404,9 @@ table .span24 {
 [class*=" icon-"]:last-child {
   *margin-left: 0;
 }
+.icon-gray {
+  background-image: url("../img/glyphicons-halflings-gray.png");
+}
 .icon-white {
   background-image: url("../img/glyphicons-halflings-white.png");
 }
@@ -1958,6 +1961,13 @@ table .span24 {
   opacity: 0.4;
   filter: alpha(opacity=40);
   cursor: pointer;
+}
+button.close {
+    padding: 0;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    -webkit-appearance: none;
 }
 .btn {
   display: inline-block;

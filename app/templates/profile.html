@@ -13,7 +13,7 @@
             </h1>
         </section>
     </aside>
-    <aside class="offset2 span6">
+    <aside class="span8">
         <section>
             <table class="table">
                 <thead>
@@ -24,8 +24,11 @@
                 <tbody>
                     {% for queue in queue_tracks %}
                     <tr class="recent-track" data-original-title="{{ queue.track.title }}" data-content="Title: <strong>{{ queue.track.title }}</strong><br>Artist: <strong>{{ queue.track.artist }}</strong>">
-                        <td>{{ queue.track.title|truncatewords:6 }} - {{ queue.track.artist|truncatewords:5 }}</td>
-                        <td><small>added at {{ queue.time_added|date:"g:i a \o\n j F Y" }}</small></td>
+                        <td class="profile-track">{{ queue.track.title|truncatewords:6 }} - {{ queue.track.artist|truncatewords:5 }}</td>
+                        <td class="profile-track-added"><small>added at {{ queue.time_added|date:"g:i a \o\n j F Y" }}</small></td>
+                        {% if user_profile.pk == user.pk %}
+                        <td class="profile-track-close"><button class="delete-queue-item close" name="{{ queue.pk }}">×</button></td>
+                        {% endif %}
                     </tr>
                     {% endfor %}
                 </tbody>

@@ -6,8 +6,32 @@
 <div class="hero-unit center">
 <form action="{% url search-page %}" method="post">
     {% csrf_token %}
-    <input type="input" name="search_term" value="{{ search_query }}" placeholder="Search Query" /><br>
+    <input type="input" name="search_term" value="{{ search_terms }}" placeholder="Search Query" /><br>
 </form>
+</div>
+<div class="modal fade" id="confirmModal">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>Confirm track</h3>
+    </div>
+    <div class="modal-body">
+        <p>It appears this track was recently placed in the queue.  Do you want to add it again?</p>
+    </div>
+    <div class="modal-footer">
+        <button class="queue-track-link-confirm btn btn-primary" name="">Confirm</button>
+    </div>
+</div>
+<div class="modal fade" id="successModal">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>Track added</h3>
+    </div>
+    <div class="modal-body">
+        <p>Congratulations, you have successfully added a track to the queue!</p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" data-dismiss="modal">Close</button>
+    </div>
 </div>
 <table class="table" name="search_table">
     {% if search_data %}
@@ -20,7 +44,7 @@
             <th class="search-track-title">Title</th>
             <th class="search-track-artist">Artist</th>
             <th class="search-track-album">Album</th>
-            <th class="search-track-queue">Queue</th>
+            <th class="search-track-queue">Queue?</th>
         </tr>
     </thead>
     <tbody>
@@ -29,7 +53,7 @@
             <td class="search-track-title">{{ track.title }}</td>
             <td class="search-track-artist">{{ track.artist }}</td>
             <td class="search-track-album">{{ track.album }}</td>
-            <td class="search-track-queue"></td>
+            <td class="search-track-queue"><button class="queue-track-link btn btn-success" name="{{ track.pk }}"><i class="icon-plus-sign icon-white"></i></button></td>
         </tr>
     {% endfor %}
     </tbody>
