@@ -40,7 +40,7 @@ $(document).ready(function() {
 
         tbody = $.reduce(table, $('<tbody />'), function(total, i, item) { return total.append(item) });
         thead_search_results = $('<tr><th>Search Results:</th><th>' + list.length + ' Results</th></tr>');
-        thead_titles = $('<tr><th>Title</th><th>Artist</th><th>Album</th><th>Queue?</th></tr>');
+        thead_titles = $('<tr><th>Title</th><th>Artist</th><th>Album</th><th>Queue</th></tr>');
         thead = $('<thead />').append(thead_search_results).append(thead_titles);
         
         return thead.add(tbody);
