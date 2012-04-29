@@ -22,6 +22,46 @@ import time
 import multiprocessing
 pool = multiprocessing.Pool()
 
+class TermAccumulator():
+    def __init__(self):
+        self._list = []
+    
+    def check_data(self, term):
+        for known_terms in self._list:
+            terms_to_check = [True if term_to_check in known_terms else False for term_to_check in term]
+            terms_to_check += [True if term_to_check in term else False for term_to_check in known_terms]
+            this_round = reduce(lambda y,x: x and y, terms_to_check, True)
+            if this_round is True:
+                return False
+
+        return True
+
+    def add_data(self, term):
+        self._list.append(term)
+
+    def get_list(self):
+        return self._list
+
+def patriangle(ta, base_term, terms, degree):
+    if degree > 0:
+        for term in terms:
+            new_terms = list(terms)
+            new_terms.remove(term)
+            new_base_term = list(base_term)
+            new_base_term.append(term)
+            patriangle(ta, new_base_term, new_terms, degree - 1)
+    else:
+        for term in terms:
+            new_term = list(base_term)
+            new_term.append(term)
+            if ta.check_data(new_term):
+                ta.add_data(new_term)
+
+def term_triangle(ta, terms):
+    for degree in range(len(terms)-1, -1, -1):
+        patriangle(ta, [], terms, degree)
+    return ta.get_list()
+
 def index_view(request):
     queue_items = QueueItem.objects.filter(played = False, deleted = False).order_by('pk')[0:10]
     
@@ -79,7 +119,7 @@ def instant_search_view(request):
         
         return HttpResponse(serializers.serialize('json',
             query,
-            fields = ('title','album','artist')))
+            fields = ('title','album','artist','count')))
     
     raise Http404
 
@@ -87,21 +127,25 @@ def instant_search_fn(search_term):
     raw_search_terms = search_term.split()
     search_terms = filter(None, raw_search_terms)
 
-    title_map       = map(lambda term: '(`title` LIKE %s) * {0}'.format(len(term) * 3), search_terms)
-    album_map       = map(lambda term: '(`album` LIKE %s) * {0}'.format(len(term)), search_terms)
-    artist_map      = map(lambda term: '(`artist` LIKE %s) * {0}'.format(len(term) * 2), search_terms)
-    albumartist_map = map(lambda term: '(`albumartist` LIKE %s) * {0}'.format(len(term) * 2), search_terms)
+    ta = TermAccumulator()
 
-    changed_terms = map(lambda term: '%{0}%'.format(term), search_terms)
+    triangle_terms = map(lambda term: ' '.join(term), term_triangle(ta, search_terms))
+
+    title_map       = map(lambda term: '(`title` LIKE %s) * {0} * {0}'.format(len(term) * 2), triangle_terms)
+    album_map       = map(lambda term: '(`album` LIKE %s) * {0} * {0}'.format(len(term)), triangle_terms)
+    artist_map      = map(lambda term: '(`artist` LIKE %s) * {0} * {0}'.format(len(term) * 3), triangle_terms)
+    albumartist_map = map(lambda term: '(`albumartist` LIKE %s) * {0} * {0}'.format(len(term) * 2), triangle_terms)
+
+    changed_terms = map(lambda term: '%{0}%'.format(term), triangle_terms)
     
     query = Track.objects.extra(
         select = {
             'count': ' + '.join(title_map + album_map + artist_map + albumartist_map)
         },
         select_params = changed_terms * 4,
-        where = [' OR '.join(title_map + album_map + artist_map + albumartist_map)],
+        where = [' + '.join(title_map + album_map + artist_map + albumartist_map) + ' > 300'],
         params = changed_terms * 4,
-        order_by = ['-count', 'artist'])
+        order_by = ['-count'])
     
     return query
 
