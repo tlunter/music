@@ -11,6 +11,9 @@
                 <img src="http://gravatar.com/avatar/{{ gravatar_email }}.png" alt="{{ user_profile.username }}" class="gravatar">
                 {{ user_profile.username }}
             </h1>
+            <p>
+                {{ queueitems_count }} Queued Track{{ queueitems_count|pluralize }}
+            </p>
         </section>
     </aside>
     <aside class="span8">

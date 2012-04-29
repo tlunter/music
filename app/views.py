@@ -44,11 +44,13 @@ def profile_view(request, username = None):
     gravatar_email = m.hexdigest()
     
     queue_tracks = QueueItem.objects.filter(user = user_profile).exclude(deleted = True).order_by('-time_added')[:10]
+    queueitems_count = user_profile.queueitem_set.exclude(deleted = True).count()
     
     return render_to_response('profile.html',
             {'user_profile': user_profile,
              'gravatar_email': gravatar_email,
-             'queue_tracks': queue_tracks},
+             'queue_tracks': queue_tracks,
+             'queueitems_count': queueitems_count},
             context_instance=RequestContext(request))
 
 @login_required
