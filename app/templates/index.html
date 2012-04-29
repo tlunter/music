@@ -1,6 +1,8 @@
 {% extends 'layout.html' %}
 
 {% block title %}Home{% endblock %}
+{% block css %}<link href="{{ STATIC_URL }}index.css" rel="stylesheet" type="text/css" media="screen">{% endblock %}
+{% block js %}{% endblock %}
 
 {% block content %}
                 {% if user.is_authenticated %}

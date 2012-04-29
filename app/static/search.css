@@ -1,0 +1,17 @@
+.search-track-title {
+    width: 45%;
+}
+
+.search-track-artist {
+    width: 25%;
+}
+
+.search-track-album {
+    width: 25%;
+}
+
+.search-track-queue {
+    width: 5%;
+    text-align: center !important;
+}
+

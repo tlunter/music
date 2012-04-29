@@ -49,7 +49,7 @@ h1, h2, h3, h4, h5, h6 {
 h1 {
     font-size: 3em;
     letter-spacing: -2px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 h2 {
@@ -65,74 +65,7 @@ p {
     line-height: 1.7em;
 }
 
-.gravatar {
-    float: left;
-    margin-right: 10px;
-}
-
-.recent-track {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 10px;
-}
-
-.recent-track-title {
-    font-size: 11px;
-    width: 35%;
-}
-
-.recent-track-artist {
-    font-size: 11px;
-    width: 20%;
-}
-
-.recent-track-album {
-    font-size: 11px;
-    width: 20%;
-}
-
-.recent-track-date {
-    font-size: 11px;
-    width: 25%;
-}
-
-.popover-inner {
-    width: auto;
-}
-
 small {
     font-size: 10px;
 }
 
-.search-track-title {
-    width: 45%;
-}
-
-.search-track-artist {
-    width: 25%;
-}
-
-.search-track-album {
-    width: 25%;
-}
-
-.search-track-queue {
-    width: 5%;
-    text-align: center !important;
-}
-
-.profile-track {
-    width: 60%;
-}
-
-.profile-track-added {
-    text-align: right !important;
-}
-
-.profile-track-close {
-    width: 2.5%;
-}
-
-.popover.in {
-  opacity: 0.8 !important;
-  filter: alpha(opacity=80) !important;
-}
