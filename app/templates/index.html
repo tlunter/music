@@ -14,12 +14,19 @@
                             <th>Current Queue</th>
                             <th>{{ queue_items|length }} Track{{ queue_items|pluralize }}</th>
                         </tr>
+                        <tr>
+                            <th>Title</th>
+                            <th>Artist</th>
+                            <th>Album</th>
+                            <th>Date Added</th>
                     </thead>
                     <tbody>
                     {% for track in queue_items %}
-                        <tr class="recent-track" data-original-title="{{ track.track.title }}" data-content="<div class='recent-track-data'>Title: <strong class='recent-track-title'>{{ track.track.title }}</strong><br>Artist: <strong class='recent-track-artist'>{{ track.track.artist }}</strong><br>Album: <strong class='recent-track-album'>{{ track.track.album }}</strong></div>">
-                            <td>{{ track.track.title }} - {{ track.track.artist }}</td>
-                            <td class="recent-track-date"><small>added at {{ track.time_added|date:"g:i a \o\n j F Y" }}</small></td>
+                        <tr>
+                            <td class="recent-track-title">{{ track.track.title }}</td>
+                            <td class="recent-track-artist">{{ track.track.artist }}</td>
+                            <td class="recent-track-album">{{ track.track.album }}</td>
+                            <td class="recent-track-date">added at {{ track.time_added|date:"g:i a \o\n j F Y" }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>

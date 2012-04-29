@@ -192,6 +192,13 @@ def start_track_update(request):
     scanner.save()
     
     def start_scan(scan_id): 
+        
+        all_tracks = Track.objects.all()
+
+        for track in all_tracks:
+            if not os.path.exists(track.file_path.strip('"').strip("'")):
+                track.delete()
+        
         ScanCount.objects.filter(pk = scan_id).update(state = 'SC')
         # Walk through the whole folder for just the files
         for root, dirs, files in os.walk(MUSIC_FOLDER):
