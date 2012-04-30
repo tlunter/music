@@ -43,7 +43,7 @@ class TermAccumulator():
         return self._list
 
 def patriangle(ta, base_term, terms, degree):
-    if degree > 0:
+    if degree > 1:
         for term in terms:
             new_terms = list(terms)
             new_terms.remove(term)
@@ -58,7 +58,7 @@ def patriangle(ta, base_term, terms, degree):
                 ta.add_data(new_term)
 
 def term_triangle(ta, terms):
-    for degree in range(len(terms)-1, -1, -1):
+    for degree in range(len(terms), -1, -1):
         patriangle(ta, [], terms, degree)
     return ta.get_list()
 
