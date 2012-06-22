@@ -53,7 +53,7 @@ $(document).ready(function() {
     
     $('[name=search_term]').bindWithDelay("keyup",  function () {
         $.ajax({
-            url: '/instant-search/',
+            url: ROOT_URL + '/instant-search/',
             type: 'POST',
             data: {'search_term': this.value},
             success: function(data) { $('[name=search_table]').html(format_data(data)) }
@@ -70,7 +70,7 @@ $(document).ready(function() {
 $(document).on('click','.queue-track-link', function(event) {
     button_data = $(this);
     $.ajax({
-        url: '/queue-track/',
+        url: ROOT_URL + '/queue-track/',
         type: 'POST',
         data: {'track-pk': button_data.attr('name')},
         success: function(data) { 
@@ -91,7 +91,7 @@ $(document).on('click', '.queue-track-link-confirm', function(event) {
     button_data = $(this);
     $('#confirmModal').modal('hide');
     $.ajax({
-        url: '/queue-track/',
+        url: ROOT_URL + '/queue-track/',
         type: 'POST',
         data: {'track-pk': button_data.attr('name'), 'confirm': true},
         success: function(data) {

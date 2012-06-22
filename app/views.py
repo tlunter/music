@@ -1,4 +1,4 @@
-from Music.app.models import Track, QueueItem, Setting, ScanCount
+from Music.app.models import Track, QueueItem, Setting, ScanCount, SearchCount
 from Music.settings import MUSIC_FOLDER
 from django.contrib.auth.models import User
 from django.shortcuts import render_to_response, get_object_or_404
@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth import logout
-from django.db.models import F, Q
+from django.db.models import F, Q, Avg, Sum
 from django.core import serializers
 from django.views.decorators.csrf import csrf_exempt
 
@@ -123,11 +123,27 @@ def instant_search_view(request):
     
     raise Http404
 
+def get_curr_median_score():
+    searchcounts = SearchCount.objects.all().order_by('average_score')
+
+    total_tracks = searchcounts.aggregate(Sum('track_count'))
+    median = total_tracks['track_count__sum'] / 2
+
+    score_offset = 200
+    next_count = 0
+    for count in searchcounts:
+        prev_count = next_count
+        next_count += count.track_count
+        if prev_count < median and next_count > median:
+            score_offset = count.average_score
+    return 200
+
 def instant_search_fn(search_term):
     raw_search_terms = search_term.split()
     search_terms = filter(None, raw_search_terms)
 
     ta = TermAccumulator()
+    score_offset = get_curr_median_score()
 
     triangle_terms = map(lambda term: ' '.join(term), term_triangle(ta, search_terms))
 
@@ -137,16 +153,30 @@ def instant_search_fn(search_term):
     albumartist_map = map(lambda term: '(`albumartist` LIKE %s) * {0} * {0}'.format(len(term) * 2), triangle_terms)
 
     changed_terms = map(lambda term: '%{0}%'.format(term), triangle_terms)
-    
+
     query = Track.objects.extra(
         select = {
             'count': ' + '.join(title_map + album_map + artist_map + albumartist_map)
         },
         select_params = changed_terms * 4,
-        where = [' + '.join(title_map + album_map + artist_map + albumartist_map) + ' > 300'],
-        params = changed_terms * 4,
+        where = [' + '.join(title_map + album_map + artist_map + albumartist_map) + ' > %s'],
+        params = changed_terms * 4 + [score_offset],
         order_by = ['-count'])
-    
+
+    track_count = query.count()
+    if track_count:
+        if track_count % 2 == 0:
+            first_index = track_count / 2
+            second_index = first_index - 1
+            average_score = query[first_index].count + query[second_index].count
+            average_score = average_score / 2
+        else:
+            index = track_count - 1
+            index = index / 2
+            average_score = query[index].count
+
+        SearchCount.objects.create(terms = search_term, track_count = track_count, average_score = average_score)
+
     return query
 
 @login_required

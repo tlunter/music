@@ -34,3 +34,8 @@ class ScanCount(models.Model):
     curr_count = models.IntegerField()
     total_count = models.IntegerField()
     state = models.CharField(max_length=2, choices=SCAN_STATES)
+
+class SearchCount(models.Model):
+    terms = models.CharField(max_length=255, default='')
+    track_count = models.IntegerField()
+    average_score = models.IntegerField()
