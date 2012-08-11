@@ -5,7 +5,7 @@ $(document).ready(function() {
 $(document).on('click', '.delete-queue-item', function(event) {
     button_data = $(this);
     $.ajax({
-        url: '/delete-queue-item/',
+        url: '/music/delete-queue-item/',
         type: 'POST',
         data: {'queue-item-pk': button_data.attr('name')},
         success: function(data) {

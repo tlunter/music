@@ -136,6 +136,8 @@ def get_curr_median_score():
         next_count += count.track_count
         if prev_count < median and next_count > median:
             score_offset = count.average_score
+
+    print "Score Offset", str(score_offset)
     return 200
 
 def instant_search_fn(search_term):
