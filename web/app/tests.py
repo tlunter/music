@@ -6,7 +6,7 @@ Replace this with more appropriate tests for your application.
 """
 
 import unittest
-from Music.app.models import Track
+from web.app.models import Track
 from django.db import IntegrityError
 
 class TrackTests(unittest.TestCase):

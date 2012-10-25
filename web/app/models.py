@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from Music.settings import SCAN_STATES
+from django.conf import settings
 
 # Create your models here.
 class Setting(models.Model):
@@ -33,7 +33,7 @@ class ScanCount(models.Model):
     user = models.ForeignKey(User)
     curr_count = models.IntegerField()
     total_count = models.IntegerField()
-    state = models.CharField(max_length=2, choices=SCAN_STATES)
+    state = models.CharField(max_length=2, choices=settings.SCAN_STATES)
 
 class SearchCount(models.Model):
     terms = models.CharField(max_length=255, default='')

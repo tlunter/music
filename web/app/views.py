@@ -1,5 +1,5 @@
-from Music.app.models import Track, QueueItem, Setting, ScanCount, SearchCount
-from Music.settings import MUSIC_FOLDER
+from web.app.models import Track, QueueItem, Setting, ScanCount, SearchCount
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse, Http404
@@ -257,7 +257,7 @@ def load_tracks_view(request):
             context_instance=RequestContext(request))
 
 def start_track_update(request):
-    tracks = subprocess.Popen(['find', MUSIC_FOLDER, '-iname', '*.mp3'], stdout=subprocess.PIPE)
+    tracks = subprocess.Popen(['find', settings.MUSIC_FOLDER, '-iname', '*.mp3'], stdout=subprocess.PIPE)
     track_count = len(tracks.stdout.readlines())
     
     if not track_count:
@@ -279,7 +279,7 @@ def start_track_update(request):
         
         ScanCount.objects.filter(pk = scan_id).update(state = 'SC')
         # Walk through the whole folder for just the files
-        for root, dirs, files in os.walk(MUSIC_FOLDER):
+        for root, dirs, files in os.walk(settings.MUSIC_FOLDER):
             music = []
             # Go through the files in the current folder
             for mp3 in files:
