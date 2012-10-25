@@ -1,0 +1,25 @@
+.recent-track {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 10px;
+}
+
+.recent-track-title {
+    font-size: 11px;
+    width: 35%;
+}
+
+.recent-track-artist {
+    font-size: 11px;
+    width: 20%;
+}
+
+.recent-track-album {
+    font-size: 11px;
+    width: 20%;
+}
+
+.recent-track-date {
+    font-size: 11px;
+    width: 25%;
+}
+

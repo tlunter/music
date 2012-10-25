@@ -1,0 +1,11 @@
+{% extends 'layout.html' %}
+
+{% block title %}Scan error!{% endblock %}
+
+{% block content %}
+<h1>Error!</h1>
+<h2>Something went wrong!</h2>
+{% if error == "no tracks" %}
+A scan wasn't started because apparently there are no files in your music folder.
+{% endif %}
+{% endblock %}
