@@ -1,4 +1,5 @@
 import os
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 
 ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
 ROOT_URL = '/music'
@@ -91,7 +92,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'web.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -100,19 +101,10 @@ TEMPLATE_DIRS = (
     os.path.join(ROOT_PATH,'app','templates'),
 )
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'django.contrib.messages.context_processors.messages',
-    'django.core.context_processors.debug',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
-    'django.core.context_processors.static',
+TEMPLATE_CONTEXT_PROCESSORS += (
     'social_auth.context_processors.social_auth_by_type_backends',
+    'app.context_processors.root_url',
 )
-
-SERIALIZATION_MODULES = {
-    'json': 'wadofstuff.django.serializers.json'
-}
 
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.google.GoogleOAuth2Backend',

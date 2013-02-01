@@ -1,4 +1,4 @@
-from web.app.models import Track, QueueItem, Setting, ScanCount, SearchCount
+from app.models import Track, QueueItem, Setting, ScanCount, SearchCount
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.shortcuts import render_to_response, get_object_or_404
